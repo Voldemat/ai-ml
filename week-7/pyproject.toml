@@ -1,0 +1,30 @@
+[project]
+name = "week-7"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "jupyter>=1.1.1",
+    "matplotlib>=3.10.8",
+    "numpy>=2.4.3",
+    "scikit-learn>=1.8.0",
+    "seaborn>=0.13.2",
+]
+[tool.ruff]
+line-length = 80
+
+[dependency-groups]
+dev = [
+    "mypy>=1.19.1",
+    "ruff>=0.15.6",
+    "scikit-learn-stubs>=0.0.3",
+]
+
+[[tool.mypy.overrides]]
+module = ["sklearn.*"]
+follow_untyped_imports = true
+
+[tool.pyright]
+ignore = ["sklearn"]
+reportUnknownVariableType = false
