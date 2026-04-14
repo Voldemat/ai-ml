@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import cast
 import numpy as np
 
@@ -46,6 +47,8 @@ def compute_new_weights(
     gradient: np.typing.NDArray[np.float64],
     learning_rate: float,
 ) -> np.typing.NDArray[np.float64]:
+    print(weights)
+    print(gradient)
     return weights - learning_rate * gradient
 
 
@@ -73,7 +76,7 @@ def train_weights(
         errors = predictions - reference
         loss = compute_mean_squared_loss(errors)
         loss_history.append(loss)
-        gradient = compute_gradient(cast(int, inputs.shape[0]), inputs, loss)
+        gradient = compute_gradient(cast(int, inputs.shape[0]), inputs, errors)
         weights = compute_new_weights(
             weights, gradient, learning_rate=learning_rate
         )
@@ -83,17 +86,19 @@ def train_weights(
 
 
 def main() -> None:
-    x = np.linspace(0, 10, 200).reshape(-1, 1)
-    y = np.asarray(3 * x.squeeze() + 5 + np.random.normal(0, 1, 200), dtype=float).ravel()
-    initial_weights = np.zeros(x.shape[1])
+    initial_inputs = np.linspace(0, 10, 200).reshape(-1, 1)
+    test_dataset = np.asarray(
+        3 * initial_inputs.squeeze() + 5 + np.random.normal(0, 1, 200),
+        dtype=float,
+    ).ravel()
+    inputs = add_intercept_to_inputs(initial_inputs)
+    initial_weights = np.zeros(inputs.shape[1])
     weights = train_weights(
-        add_intercept_to_inputs(x),
-        y,
+        inputs,
+        test_dataset,
         initial_weights,
         max_iterations=3000,
         learning_rate=0.05,
         min_change=1e-10,
     )
-    print(predict(x, weights))
-
-main()
+    print(predict(inputs, weights))
