@@ -12,7 +12,11 @@ dependencies = [
     "ruff>=0.15.12",
     "scikit-learn==1.6.1",
     "seaborn>=0.13.2",
+    "ty>=0.0.35",
 ]
 
 [tool.ruff]
 line-length = 80
+
+[tool.basedpyright]
+reportExplicitAny = false
